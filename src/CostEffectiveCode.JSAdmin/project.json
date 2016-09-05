@@ -11,16 +11,7 @@
   "frameworks": {
     "net452": {
       "dependencies": {
-        "CostEffectiveCode.WebApi2.Example2": "1.0.0-*",
-      }
-    },
-    "netcoreapp1.0": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "type": "platform",
-          "version": "1.0.0"
-        }
+        "CostEffectiveCode.WebApi2.Example2": "1.0.0-*"
       }
     }
   },
