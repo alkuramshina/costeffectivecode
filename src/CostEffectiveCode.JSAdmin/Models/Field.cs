@@ -10,8 +10,6 @@ namespace CostEffectiveCode.JSAdmin.Models
 
         public string Type { get; set; }
 
-        public bool Editable { get; set; }
-
         public string Format { get; set; }
 
         public List<KeyValuePair<object, string>> Choices { get; set; }

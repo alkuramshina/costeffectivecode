@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using CostEffectiveCode.JSAdmin.Models;
 using System.Linq;
@@ -19,7 +18,7 @@ namespace CostEffectiveCode.JSAdmin
                 .ToArray();
         }
 
-        public Application Init(string title)
+        public Application Configure(string title)
         {
             var application = new Application
             {
@@ -41,7 +40,7 @@ namespace CostEffectiveCode.JSAdmin
 
         public Entity DefineEntity(Type controller)
         {
-            var name = GetName(controller);
+            var name = controller.GetDisplayName();
 
             var entity = new Entity
             {
@@ -61,12 +60,6 @@ namespace CostEffectiveCode.JSAdmin
             entity.DefineEditionView(actions);
 
             return entity;
-        }
-
-        private static string GetName(MemberInfo type)
-        {
-            return type.GetCustomAttribute<DisplayAttribute>()?.GetName() ??
-                   type.Name.Replace("Controller", "");
         }
     }
 }

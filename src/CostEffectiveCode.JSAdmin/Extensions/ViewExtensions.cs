@@ -17,13 +17,10 @@ namespace CostEffectiveCode.JSAdmin.Extensions
             if (action == null) return;
 
             var responseType = GetResponseType(action);
+            var fields = responseType.GetElementType()
+                .GetJsFields();
 
-            entity.ListView = new View {Title = "List"};
-        }
-
-        public static void DefineDeletionView(this Entity entity, IEnumerable<MemberInfo> actions)
-        {
-            entity.DeletionView = new View {Title = "Deletion"};
+            entity.ListView = new View { Title = "List", Fields = fields };
         }
 
         public static void DefineEditionView(this Entity entity, IEnumerable<MemberInfo> actions)
@@ -34,13 +31,19 @@ namespace CostEffectiveCode.JSAdmin.Extensions
             if (action == null) return;
 
             var responseType = GetResponseType(action);
+            var fields = responseType.GetJsFields();
 
-            entity.EditionView = new View {Title = "Edition"};
+            entity.EditionView = new View {Title = "Edition", Fields = fields };
+        }
+
+        public static void DefineDeletionView(this Entity entity, IEnumerable<MemberInfo> actions)
+        {
+            throw new NotImplementedException();
         }
 
         public static void DefineCreationView(this Entity entity, IEnumerable<MemberInfo> actions)
         {
-            entity.CreationView = new View {Title = "Creation"};
+            throw new NotImplementedException();
         }
 
         private static Type GetResponseType(MemberInfo type)
