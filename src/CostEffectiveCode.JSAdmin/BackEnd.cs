@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using CostEffectiveCode.JSAdmin.Models;
 using System.Linq;
+using System.Web.Http;
 using CostEffectiveCode.JSAdmin.Extensions;
 
 namespace CostEffectiveCode.JSAdmin
@@ -25,10 +27,11 @@ namespace CostEffectiveCode.JSAdmin
                 Entities = new List<Entity>()
             };
 
-            // TODO: fix the 'where' spec for controllers / implementations of CqrsController?
+            // TODO: implementations of CqrsController?
             var controllers = _assemblies.SelectMany(
                 a => a.GetTypes()
-                    .Where(type => type.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)));
+                    .Where(type => type.IsClass && !type.IsAbstract
+                                   && typeof(ApiController).IsAssignableFrom(type)));
 
             application.Entities
                 .AddRange(controllers.Select(DefineEntity));
@@ -38,9 +41,7 @@ namespace CostEffectiveCode.JSAdmin
 
         public Entity DefineEntity(Type controller)
         {
-            // TODO: check the DisplayAttribute value
-            var name = controller.Name
-                .Replace("Controller", "");
+            var name = GetName(controller);
 
             var entity = new Entity
             {
@@ -56,11 +57,16 @@ namespace CostEffectiveCode.JSAdmin
                         !m.GetCustomAttributes(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), true)
                             .Any());
 
-            entity.DefineListView(actions.Single(x => x.Name == "List"));
-            entity.DefineEditionView(actions.Single(x => x.Name == "Get"));
+            entity.DefineListView(actions);
+            entity.DefineEditionView(actions);
 
             return entity;
         }
 
+        private static string GetName(MemberInfo type)
+        {
+            return type.GetCustomAttribute<DisplayAttribute>()?.GetName() ??
+                   type.Name.Replace("Controller", "");
+        }
     }
 }

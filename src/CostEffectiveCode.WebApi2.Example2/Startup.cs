@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SimpleInjector;
-using SimpleInjector.Integration.WebApi;
 
 namespace CostEffectiveCode.WebApi2.Example2
 {
@@ -58,8 +56,6 @@ namespace CostEffectiveCode.WebApi2.Example2
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseMvc();
-
-            
         }
     }
 }
