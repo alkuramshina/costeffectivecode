@@ -29,25 +29,6 @@ namespace CostEffectiveCode.WebApi2.Example2
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-
-            AutoMapperWrapper.Init();
-
-            var container = new Container();
-            container.Options.DefaultScopedLifestyle = new WebApiRequestLifestyle();
-
-            var registration = Lifestyle.Scoped.CreateRegistration<CommandQueryFactory>(container);
-
-
-            container.AddRegistration(typeof(IQueryFactory), registration);
-            container.AddRegistration(typeof(ICommandFactory), registration);
-
-            // This is an extension method from the integration package.
-            container.RegisterWebApiControllers(GlobalConfiguration.Configuration);
-
-            container.Verify();
-
-            GlobalConfiguration.Configuration.DependencyResolver =
-                new SimpleInjectorWebApiDependencyResolver(container);
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -59,6 +40,11 @@ namespace CostEffectiveCode.WebApi2.Example2
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
+
+            AutoMapperWrapper.Init();
+            //services.AddScoped<CommandQueryFactory>();
+            services.AddScoped<IQueryFactory, CommandQueryFactory>();
+            services.AddScoped<ICommandFactory, CommandQueryFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -72,6 +58,8 @@ namespace CostEffectiveCode.WebApi2.Example2
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseMvc();
+
+            
         }
     }
 }
